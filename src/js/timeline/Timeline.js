@@ -865,11 +865,13 @@ class Timeline {
     // Goto previous slide
     goToPrev() {
         this.goTo(this._getSlideIndex(this.current_id) - 1);
+        this.focusContainer();
     }
 
     // Goto next slide
     goToNext() {
         this.goTo(this._getSlideIndex(this.current_id) + 1);
+        this.focusContainer();
     }
 
     /* Event manipulation
@@ -963,6 +965,10 @@ class Timeline {
         } else {
             trace('updateDisplay called but timeline is not in ready state')
         }
+    }
+
+    focusContainer() {
+        this._el.container.focus();
     }
 
     _initGoogleAnalytics() {

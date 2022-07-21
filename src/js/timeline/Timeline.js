@@ -195,7 +195,7 @@ class Timeline {
         addClass(this._el.container, 'tl-timeline');
         this._el.container.setAttribute('tabindex', '0');
         this._el.container.setAttribute('role', 'region');
-        this._el.container.setAttribute('aria-role', 'Timeline');
+        this._el.container.setAttribute('aria-label', 'Timeline');
 
         if (this.options.is_embed) {
             addClass(this._el.container, 'tl-timeline-embed');
@@ -432,7 +432,7 @@ class Timeline {
         // Create TimeNav
         this._timenav = new TimeNav(this._el.timenav, this.config, this.options, this.language);
         this._el.timenav.setAttribute('role', 'group');
-        this._el.timenav.setAttribute('aria-role', 'Timeline navigation');
+        this._el.timenav.setAttribute('aria-label', 'Timeline navigation');
         this._timenav.on('loaded', this._onTimeNavLoaded, this);
         this._timenav.options.height = this.options.timenav_height;
         this._timenav.init();
@@ -848,18 +848,25 @@ class Timeline {
 
     // Goto slide n
     goTo(n) {
-        if (n < 0 || n >= this.config.events.length) {
+        if (n < 0) {
             return;
         }
 
-        if (this.config.title) {
-            if (n === 0) {
-                this.goToId(this.config.title.unique_id);
+        try {
+            if (this.config.title) {
+                if (n === 0) {
+                    this.goToId(this.config.title.unique_id);
+                } else {
+                    this.goToId(this.config.events[n - 1].unique_id);
+                }
             } else {
-                this.goToId(this.config.events[n - 1].unique_id);
+                this.goToId(this.config.events[n].unique_id);
             }
-        } else {
-            this.goToId(this.config.events[n].unique_id);
+        } catch {
+            // because n is interpreted differently depending on
+            // whether there's a title slide, easier to use catch
+            // to handle navigating beyond end instead of test before
+            return
         }
     }
 

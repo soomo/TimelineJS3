@@ -551,6 +551,12 @@ export class TimeNav {
             }
         }
 
+        if (n >= 0 && n < this._markers.length) {
+            this.current_id = this._markers[n].data.unique_id;
+        } else {
+            this.current_id = '';
+        }
+
         this._dispatchVisibleTicksChange();
     }
 
@@ -563,7 +569,7 @@ export class TimeNav {
          * The timeout is required to wait till the end of the animation
          * and repositioning of the ticks on the screen
          */
-        if(this.ticks_change_timeout) {
+        if (this.ticks_change_timeout) {
             clearTimeout(this.ticks_change_timeout);
             this.ticks_change_timeout = null;
         }
@@ -667,23 +673,27 @@ export class TimeNav {
 
         switch (e.key) {
             case "ArrowUp":
-            case "ArrowRight": {
-                this.focusNext();
-                break;
-            }
+            case "ArrowRight":
+                {
+                    this.focusNext();
+                    break;
+                }
             case "ArrowDown":
-            case "ArrowLeft": {
-                this.focusPrevious();
-                break;
-            }
-            case "Home":{
-                this.focusOn(0);
-                break;
-            }
-            case "End":{
-                this.focusOn(this._markers.length - 1);
-                break;
-            }
+            case "ArrowLeft":
+                {
+                    this.focusPrevious();
+                    break;
+                }
+            case "Home":
+                {
+                    this.focusOn(0);
+                    break;
+                }
+            case "End":
+                {
+                    this.focusOn(this._markers.length - 1);
+                    break;
+                }
         }
     }
 
@@ -746,9 +756,9 @@ export class TimeNav {
 
     _setLabelWithCurrentMarker() {
         const currentMarker = this._markers[this._findMarkerIndex(this.current_focused_id)];
-        const currentMarkerText = currentMarker && currentMarker.ariaLabel
-            ? `, ${currentMarker.ariaLabel}, shown`
-            : '';
+        const currentMarkerText = currentMarker && currentMarker.ariaLabel ?
+            `, ${currentMarker.ariaLabel}, shown` :
+            '';
         this._el.container.setAttribute('aria-label', `Timeline navigation ${currentMarkerText}`);
     }
 
